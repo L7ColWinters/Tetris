@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:foo="http://schemas.android.com/apk/res/labs.brian.brianstetris"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/main_screen_background">
+
+        <labs.brian.customviews.CustomFontTextView
+            android:id="@+id/newgame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/newgame"
+            android:textSize="32sp"
+            foo:font="visitor1.ttf"
+            android:layout_marginBottom="25dp"
+            android:onClick="onClick" />
+        
+        <labs.brian.customviews.CustomFontTextView
+            android:id="@+id/highscores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/highscores"
+            android:textSize="32sp"
+            foo:font="visitor1.ttf"
+            android:layout_marginBottom="25dp" 
+            android:onClick="onClick"/>
+        
+        <labs.brian.customviews.CustomFontTextView
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textSize="32sp"
+            foo:font="visitor1.ttf"
+            android:layout_marginBottom="25dp"
+            android:onClick="onClick" />
+        
+        <labs.brian.customviews.CustomFontTextView
+            android:id="@+id/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textSize="32sp"
+            foo:font="visitor1.ttf"
+            android:onClick="onClick" />
+
+    </LinearLayout>

@@ -1,23 +1,37 @@
 package labs.brian.brianstetris;
 
-import labs.brian.brianstetris.TetrisGrid.onEndGameListener;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.stmt.PreparedQuery;
+
+import labs.brian.beans.HighScoreInfo;
+import labs.brian.customviews.TetrisGrid;
+import labs.brian.customviews.TetrisGrid.onEndGameListener;
+import labs.brian.database.DatabaseHelper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.app.Activity;
-import android.graphics.Point;
-import android.view.Display;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements onEndGameListener{
 
+	private static final String PREFS_NAME = "MyPrefsFile";
 	private TetrisGrid board;
 	private TextView score;
 	
@@ -25,17 +39,19 @@ public class MainActivity extends Activity implements onEndGameListener{
 	private GestureDetector gesture;
 	
 	private boolean gameRunning = true;
-	private int screenWidth;
-	private int screenHeight;
+	
+	private TetrisMusic music;
+
+	private String currentName;
+	private EditText nameInput;
+	
+	private DatabaseHelper databaseHelper = null;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        
-        screenWidth = getWindowManager().getDefaultDisplay().getWidth();
-        screenHeight = getWindowManager().getDefaultDisplay().getHeight();
         
         board = (TetrisGrid)findViewById(R.id.tetrisboard);
         score = (TextView)findViewById(R.id.textView1);
@@ -95,10 +111,35 @@ public class MainActivity extends Activity implements onEndGameListener{
 				board.rotatePiece(TetrisGrid.ROTATE_CLOCKWISE);
 				return true;
 			}});
+        music = TetrisMusic.getInstance(this);
+        
+        currentName = getSharedPreferences(PREFS_NAME, 0).getString("currentname", "");
+        
+        createNameDialog();
+        
         startGame();
     }
 
+    private void createNameDialog(){
+    	 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+         builder.setTitle("Name of Player");
+         View v = LayoutInflater.from(this).inflate(R.layout.enternamelayout,null,false);
+         nameInput = ((EditText)v.findViewById(R.id.edittextname));
+         nameInput.setText(currentName);
+         builder.setView(v);
+         builder.setPositiveButton("Enter", new OnClickListener(){
+ 			@Override
+ 			public void onClick(DialogInterface dialog, int which) {
+ 				currentName = nameInput.getText().toString();
+ 				dialog.dismiss();
+ 			}
+         });
+         builder.setCancelable(false);
+         builder.show();
+    }
+    
     private void startGame(){
+    	music.playMusic();
     	Thread t = new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -117,6 +158,37 @@ public class MainActivity extends Activity implements onEndGameListener{
     }
     
     @Override
+    public void onPause(){
+    	super.onPause();
+    	if(music.isPlaying())
+    		music.pauseMusic();
+    }
+    
+    @Override
+    public void onResume(){
+    	super.onResume();
+    	if(music.isPaused())
+    		music.playMusic();
+    }
+    
+    @Override
+    public void onDestroy(){
+    	super.onDestroy();
+    	music.stopMusic();
+    	if (databaseHelper != null) {
+			OpenHelperManager.releaseHelper();
+			databaseHelper = null;
+		}
+    }
+    
+    private DatabaseHelper getHelper() {
+		if (databaseHelper == null) {
+			databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+		}
+		return databaseHelper;
+	}
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
@@ -126,7 +198,33 @@ public class MainActivity extends Activity implements onEndGameListener{
 	@Override
 	public void onEndGame() {
 		gameRunning = false;
-		Toast.makeText(this, "game has ended", Toast.LENGTH_LONG).show();
+		music.stopMusic();
+		
+		saveScoreIfHigher();
+		
+		finish();
+	}
+	
+	private void saveScoreIfHigher(){
+		getSharedPreferences(PREFS_NAME, 0).edit().putString("name", currentName).commit();
+		try {
+			List<HighScoreInfo> scoreDBdata = getHelper().getSimpleDataDao().queryForEq("name",currentName);
+			HighScoreInfo hsi = null;
+			if(scoreDBdata.size() > 0){
+				hsi = scoreDBdata.get(0);
+				Integer newScore = Integer.parseInt((String)score.getText());
+				if(hsi.score < newScore){
+					hsi.score = newScore;
+					getHelper().getSimpleDataDao().update(hsi);
+					Toast.makeText(this, "Thats a new high score", Toast.LENGTH_LONG).show();
+				}
+			}else{
+				hsi = new HighScoreInfo(currentName,Integer.parseInt((String)score.getText()));
+				getHelper().getSimpleDataDao().create(hsi);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

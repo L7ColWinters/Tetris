@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:foo="http://schemas.android.com/apk/res/labs.brian.brianstetris"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/main_screen_background" >
+
+    <labs.brian.customviews.CustomFontTextView
+            android:id="@+id/highscoretitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            foo:font="visitor1.ttf"
+            android:text="@string/highscores"/>
+    
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/highscoretitle"
+        android:layout_margin="20dp" >
+    </ListView>
+
+</RelativeLayout>
