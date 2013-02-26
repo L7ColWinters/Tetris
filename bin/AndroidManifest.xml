@@ -16,6 +16,8 @@
         <activity
             android:name="labs.brian.brianstetris.MainActivity"
             android:label="@string/app_name" />
+        <activity android:name="HighScoresActivity"/>
+        <activity android:name="TetrisSettingsActivity"></activity>
         <activity 
             android:name="HomeScreen">
             <intent-filter>

@@ -11,6 +11,7 @@ import labs.brian.database.DatabaseHelper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class HighScoresActivity extends Activity {
 
@@ -31,7 +32,12 @@ public class HighScoresActivity extends Activity {
 		List<HighScoreInfo> list;
 		try {
 			list = getHelper().getSimpleDataDao().queryForAll();
-			adapter.setData(list);
+			if(list.size()>0)
+				adapter.setData(list);
+			else{
+				Toast.makeText(this, "Please play a game first", Toast.LENGTH_LONG).show();
+				finish();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -15,7 +15,7 @@
         android:text="0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <labs.brian.brianstetris.TetrisGrid
+    <labs.brian.customviews.TetrisGrid
         android:id="@+id/tetrisboard"
         android:layout_width="210dp"
         android:layout_height="462dp"

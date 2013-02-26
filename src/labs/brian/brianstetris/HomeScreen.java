@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class HomeScreen extends Activity implements OnClickListener {
 
 	private static final int HomeScreen = 1;
+	private static final int HighScoresScreen = 2;
 	private TextView newgameTextview,highscoreTextview,settingsTextview,aboutTextview;
 	private TetrisMusic music;
 	private TranslateAnimation tranAnimation0,tranAnimation1,tranAnimation2,tranAnimation3;
@@ -21,9 +22,13 @@ public class HomeScreen extends Activity implements OnClickListener {
 		setContentView(R.layout.main_screen);
 		
 		newgameTextview = (TextView)findViewById(R.id.newgame);
+		newgameTextview.setOnClickListener(this);
 		highscoreTextview = (TextView)findViewById(R.id.highscores);
+		highscoreTextview.setOnClickListener(this);
 		settingsTextview = (TextView)findViewById(R.id.settings);
+		settingsTextview.setOnClickListener(this);
 		aboutTextview = (TextView)findViewById(R.id.about);
+		aboutTextview.setOnClickListener(this);
 		
 		music = TetrisMusic.getInstance(this);
 		
@@ -70,7 +75,7 @@ public class HomeScreen extends Activity implements OnClickListener {
 				startActivityForResult(new Intent(this,MainActivity.class),HomeScreen);
 				break;
 			case R.id.highscores:
-				startActivity(new Intent(this,HighScoresActivity.class));
+				startActivityForResult(new Intent(this,HighScoresActivity.class),HighScoresScreen);
 				break;
 			case R.id.settings:
 				

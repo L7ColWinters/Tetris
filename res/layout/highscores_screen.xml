@@ -3,8 +3,8 @@
     xmlns:foo="http://schemas.android.com/apk/res/labs.brian.brianstetris"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@drawable/main_screen_background" >
+    android:background="@drawable/main_screen_background"
+    android:gravity="center_horizontal" >
 
     <labs.brian.customviews.CustomFontTextView
             android:id="@+id/highscoretitle"
@@ -12,7 +12,8 @@
             android:layout_height="wrap_content"
             android:textSize="28sp"
             foo:font="visitor1.ttf"
-            android:text="@string/highscores"/>
+            android:text="@string/highscores"
+            android:layout_alignParentTop="true"/>
     
     <ListView
         android:id="@+id/listView1"

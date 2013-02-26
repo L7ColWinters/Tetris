@@ -14,8 +14,7 @@
             android:text="@string/newgame"
             android:textSize="32sp"
             foo:font="visitor1.ttf"
-            android:layout_marginBottom="25dp"
-            android:onClick="onClick" />
+            android:layout_marginBottom="25dp" />
         
         <labs.brian.customviews.CustomFontTextView
             android:id="@+id/highscores"
@@ -24,8 +23,7 @@
             android:text="@string/highscores"
             android:textSize="32sp"
             foo:font="visitor1.ttf"
-            android:layout_marginBottom="25dp" 
-            android:onClick="onClick"/>
+            android:layout_marginBottom="25dp" />
         
         <labs.brian.customviews.CustomFontTextView
             android:id="@+id/settings"
@@ -34,8 +32,7 @@
             android:text="@string/settings"
             android:textSize="32sp"
             foo:font="visitor1.ttf"
-            android:layout_marginBottom="25dp"
-            android:onClick="onClick" />
+            android:layout_marginBottom="25dp" />
         
         <labs.brian.customviews.CustomFontTextView
             android:id="@+id/about"
@@ -43,7 +40,6 @@
             android:layout_height="wrap_content"
             android:text="@string/about"
             android:textSize="32sp"
-            foo:font="visitor1.ttf"
-            android:onClick="onClick" />
+            foo:font="visitor1.ttf" />
 
     </LinearLayout>
