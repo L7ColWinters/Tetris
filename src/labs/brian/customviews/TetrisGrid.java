@@ -19,6 +19,7 @@ public class TetrisGrid extends View {
 	private static final int squaresWide = 10;
 	private static int squaresHeight = 22;//2 are not shown
 	private int [][] gameGrid;
+	private int [][] cubesDeletedGrid;
 	private static long gameScore;
 	private static final int lineScore = 100;
 	private onEndGameListener listener;
@@ -391,7 +392,6 @@ public class TetrisGrid extends View {
 		createRandomPiece();
 	}
 	
-	
 	private void checkForPoints(){
 		int tmpScore = 0;
 		Stack<Integer> linesToDelete = new Stack<Integer>();
@@ -414,9 +414,14 @@ public class TetrisGrid extends View {
 		
 		int linesDeleted = 0;
 		int [][] tmpGrid = new int[squaresWide][squaresHeight];
-		for(int y = squaresHeight - 1;y > linesToDelete.size();y--){
+		int numLinesToDelete = linesToDelete.size();
+		cubesDeletedGrid = new int[squaresWide][squaresHeight];
+		for(int y = squaresHeight - 1;y > numLinesToDelete;y--){
 			if(!linesToDelete.empty() && y == linesToDelete.peek()){
 				linesToDelete.pop();
+				for(int x = 0;x<squaresWide;x++){
+					cubesDeletedGrid[x][y] = gameGrid[x][y];
+				}
 				linesDeleted ++;
 				continue;
 			}

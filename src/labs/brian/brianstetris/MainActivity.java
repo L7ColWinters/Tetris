@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.stmt.PreparedQuery;
 
 import labs.brian.beans.HighScoreInfo;
 import labs.brian.customviews.TetrisGrid;
@@ -116,8 +115,6 @@ public class MainActivity extends Activity implements onEndGameListener{
         currentName = getSharedPreferences(PREFS_NAME, 0).getString("currentname", "");
         
         createNameDialog();
-        
-        startGame();
     }
 
     private void createNameDialog(){
@@ -131,6 +128,7 @@ public class MainActivity extends Activity implements onEndGameListener{
  			@Override
  			public void onClick(DialogInterface dialog, int which) {
  				currentName = nameInput.getText().toString();
+ 				startGame();
  				dialog.dismiss();
  			}
          });
